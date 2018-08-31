@@ -9,6 +9,7 @@ const saml = require("saml20"),
 module.exports = function (options) {
 	/* const isRevokedCallback = options.isRevoked || DEFAULT_REVOKED_FUNCTION; */
 
+	options = options || {};
 	const _requestProperty = options.userProperty || options.requestProperty || 'user';
 	const _resultProperty = options.resultProperty;
 	const credentialsRequired = typeof options.credentialsRequired === 'undefined' ? true : options.credentialsRequired;
@@ -35,12 +36,6 @@ module.exports = function (options) {
 			}
 		} else if (req.headers && req.headers.authorization) {
 			token = req.headers.authorization;
-
-			if (credentialsRequired) {
-				return next(new UnauthorizedError('credentials_bad_scheme', { message: 'Format is Authorization: [token]' }));
-			} else {
-				return next();
-			}
 		}
 
 		if (!token) {
